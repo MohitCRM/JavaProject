@@ -44,17 +44,17 @@ public class Library
     }
 
     public void borrow(String memid, String itemid)
+        throws MemberNotFoundException, ItemNotFoundException,
+               BorrowLimitExceededException, ItemNotAvailableException
     {
         if (!members.containsKey(memid))
         {
-            System.out.println("ERROR member " + memid + " not found");
-            return;
+            throw new MemberNotFoundException("member " + memid + " not found");
         }
 
         if (!items.containsKey(itemid))
         {
-            System.out.println("ERROR item " + itemid + " not found");
-            return;
+            throw new ItemNotFoundException("item " + itemid + " not found");
         }
 
         Member member = members.get(memid);
@@ -71,20 +71,17 @@ public class Library
 
         if (memberLoanCount >= member.getMaxItems())
         {
-            System.out.println("ERROR " + memid + " has reached the limit of " + member.getMaxItems());
-            return;
+            throw new BorrowLimitExceededException(memid + " has reached the limit of " + member.getMaxItems());
         }
 
         if (loans.containsKey(itemid))
         {
-            System.out.println("ERROR " + itemid + " is on loan");
-            return;
+            throw new ItemNotAvailableException(itemid + " is on loan");
         }
 
         if (!(item instanceof Borrowable))
         {
-            System.out.println("ERROR " + itemid + " cannot be borrowed");
-            return;
+            throw new ItemNotAvailableException(itemid + " cannot be borrowed");
         }
 
         int dueDay = currentDay + member.getLoanPeriod();
@@ -92,12 +89,11 @@ public class Library
         System.out.println("OK due on day " + dueDay);
     }
 
-    public void returnItem(String itemid)
+    public void returnItem(String itemid) throws ItemNotOnLoanException
     {
         if (!loans.containsKey(itemid))
         {
-            System.out.println("ERROR " + itemid + " is not on loan");
-            return;
+            throw new ItemNotOnLoanException(itemid + " is not on loan");
         }
 
         Loan loan = loans.remove(itemid);

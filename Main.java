@@ -15,39 +15,47 @@ public class Main
             String[] p = line.split("\\|");
             String cmd = p[0];
 
-            switch (cmd)
+            try
             {
-                case "ADD_BOOK":
-                    library.addBook(p[1], p[2], p[3]);
-                    break;
+                switch (cmd)
+                {
+                    case "ADD_BOOK":
+                        library.addBook(p[1], p[2], p[3]);
+                        break;
 
-                case "ADD_MAGAZINE":
-                    library.addMagazine(p[1], p[2], p[3]);
-                    break;
+                    case "ADD_MAGAZINE":
+                        library.addMagazine(p[1], p[2], p[3]);
+                        break;
 
-                case "ADD_REFERENCE":
-                    library.addReference(p[1], p[2], p[3]);
-                    break;
+                    case "ADD_REFERENCE":
+                        library.addReference(p[1], p[2], p[3]);
+                        break;
 
-                case "ADD_MEMBER":
-                    library.addMember(p[1], p[2], p[3]);
-                    break;
+                    case "ADD_MEMBER":
+                        library.addMember(p[1], p[2], p[3]);
+                        break;
 
-                case "BORROW":
-                    library.borrow(p[1], p[2]);
-                    break;
+                    case "BORROW":
+                        library.borrow(p[1], p[2]);
+                        break;
 
-                case "RETURN":
-                    library.returnItem(p[1]);
-                    break;
+                    case "RETURN":
+                        library.returnItem(p[1]);
+                        break;
 
-                case "ADVANCE":
-                    library.advance(Integer.parseInt(p[1]));
-                    break;
+                    case "ADVANCE":
+                        library.advance(Integer.parseInt(p[1]));
+                        break;
 
-                case "INVENTORY":
-                    library.inventory();
-                    break;
+                    case "INVENTORY":
+                        library.inventory();
+                        break;
+                }
+            }
+            catch (ItemNotFoundException | MemberNotFoundException | ItemNotAvailableException |
+                   BorrowLimitExceededException | ItemNotOnLoanException e)
+            {
+                System.out.println("ERROR " + e.getMessage());
             }
         }
     }
