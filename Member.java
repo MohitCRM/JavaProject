@@ -13,6 +13,15 @@ abstract public class Member
 
     public abstract int getMaxItems();
     public abstract int getLoanPeriod();
+
+    String getName()
+    {
+        return name;
+    }
+    String getID()
+    {
+        return ID;
+    }
 }
 
 class Student extends Member
