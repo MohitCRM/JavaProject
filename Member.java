@@ -58,7 +58,7 @@ class Staff extends Member
     {
         super(ID,name);
         this.maxitems = 4;
-        this.loanperiod = 30;
+        this.loanperiod = 21;
     }
 
     @Override

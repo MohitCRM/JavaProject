@@ -45,7 +45,7 @@ class Book extends LibraryItem implements Borrowable
     @Override
     String getType()
     {
-        return 'BOOK';
+        return "BOOK";
     }
 }
 
@@ -68,7 +68,7 @@ class Magazine extends LibraryItem implements Borrowable
     @Override
     String getType()
     {
-        return 'MAGAZINE';
+        return "MAGAZINE";
     }
 }
 
@@ -85,6 +85,6 @@ class ReferenceBook extends LibraryItem
     @Override
     String getType()
     {
-        return 'REFERENCE_BOOK';
+        return "REFERENCE";
     }
 }
