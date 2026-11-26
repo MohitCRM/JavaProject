@@ -1,36 +1,69 @@
-
-import java.util.ArrayList;
+import java.util.*;
 
 public class Main
 {
+    
+
     public static void main(String[] args)
     {
-        LibraryItem book = new Book("001", "Java", "Author A");
-        LibraryItem magazine = new Magazine("002", "Java", "Issue 1");
-        LibraryItem referenceBook = new ReferenceBook("003", "Java", "Author B");
 
-        Member student = new Student("001", "Student");
-        Member staff = new Staff("002", "Staff");
-        Member faculty = new Faculty("003", "Faculty");
+        Map<String,LibraryItem> items = new TreeMap<>();
+        Map<String,Member> loans = new TreeMap<>();
 
-        ArrayList<LibraryItem> libraryItems = new ArrayList<>();
-        libraryItems.add(book);
-        libraryItems.add(magazine);
-        libraryItems.add(referenceBook);
-        
-        ArrayList<Member> members = new ArrayList<>();
-        members.add(student);
-        members.add(staff);
-        members.add(faculty);
+        Scanner sc = new Scanner(System.in);
 
-        for(LibraryItem item : libraryItems)
+        String[] p = sc.nextLine().trim().split("|");
+
+        String cmd = p[0];
+
+        switch(cmd)
         {
-            System.out.println(item.getID());
-        }
-        
-        for(Member member : members)   
-        {
-            System.out.println(member.getMaxItems() + " " + member.getLoanPeriod() + " " + member.getID() + " " + member.getName());
+            case "ADD_BOOK":
+                String Id = p[1];
+                String title = p[2];
+                String author = [3];
+
+                items.put(Id,new Book(Id,title,author));
+                System.out.println("OK");
+                break;
+
+                case "ADD_MAGAZINE":
+                String Id = p[1];
+                String title = p[2];
+                String issue = [3];
+
+                items.put(Id,new Magazine(Id,title,issue));
+                System.out.printn("OK");
+                break;
+
+                case "ADD_REFERENCE":
+                String Id = p[1];
+                String title = p[2];
+                String author = [3];
+
+                items.put(Id,new ReferenceBook(Id,title,author));
+                System.out.prinln("OK");
+                break;
+
+                case "INVENTORY":
+                    for(Map.Entry<String,LibraryItem> e : items.entrySet())
+                    {
+                        LibraryItem item = e.getValue();
+                        String status = "AVAILABLE";
+
+                        if(item.getType() == "REFERENCE")
+                        {
+                            status = "NOT_BORROWABLE";
+                        }
+
+                        if(loans.containsKey(item.getId()))
+                        {
+                            String memid = loans.get(item.getId());
+                            status = "ON_LOAN|"+ memid;
+                        }
+
+                        System.out.println(e.getKey() + "|" + item.getType() + "|" + status)
+                    }
         }
     }
 }

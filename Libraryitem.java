@@ -1,14 +1,16 @@
 
-public class LibraryItem
+abstract public class LibraryItem
 {
     private final String ID;
     private final String title;
 
+    private Boolean borrowed;
 
     LibraryItem(String ID, String title)
     {
         this.ID = ID;
         this.title = title;
+        this.borrowed = false;
     }
 
     String getID()
@@ -21,7 +23,7 @@ public class LibraryItem
         return title;
     }
 
-
+    abstract String getType();
 }
 
 class Book extends LibraryItem implements Borrowable
@@ -38,6 +40,12 @@ class Book extends LibraryItem implements Borrowable
     public int getFineRate()
     {
         return 2;
+    }
+
+    @Override
+    String getType()
+    {
+        return 'BOOK';
     }
 }
 
@@ -56,6 +64,12 @@ class Magazine extends LibraryItem implements Borrowable
     {
         return 1;
     }
+
+    @Override
+    String getType()
+    {
+        return 'MAGAZINE';
+    }
 }
 
 class ReferenceBook extends LibraryItem
@@ -66,5 +80,11 @@ class ReferenceBook extends LibraryItem
     {
         super(ID,title);
         this.author = author;
+    }
+
+    @Override
+    String getType()
+    {
+        return 'REFERENCE_BOOK';
     }
 }
