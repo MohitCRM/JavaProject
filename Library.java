@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -139,6 +142,104 @@ public class Library
             }
 
             System.out.println(e.getKey() + "|" + item.getType() + "|" + status);
+        }
+    }
+
+    public void loans(String memberId) throws MemberNotFoundException
+    {
+        if (!members.containsKey(memberId))
+        {
+            throw new MemberNotFoundException("member " + memberId + " not found");
+        }
+
+        List<Loan> memberLoans = new ArrayList<>();
+        for (Loan loan : loans.values())
+        {
+            if (loan.getmemID().equals(memberId))
+            {
+                memberLoans.add(loan);
+            }
+        }
+
+        if (memberLoans.isEmpty())
+        {
+            System.out.println("NONE");
+            return;
+        }
+
+        memberLoans.sort(Comparator.comparingInt(Loan::getDueDay)
+                                   .thenComparing(Loan::getitemID));
+
+        for (Loan loan : memberLoans)
+        {
+            LibraryItem item = items.get(loan.getitemID());
+            System.out.println(loan.getitemID() + "|" + item.getTitle() + "|" + loan.getDueDay());
+        }
+    }
+
+    public void overdue()
+    {
+        List<Loan> overdueLoans = new ArrayList<>();
+        for (Loan loan : loans.values())
+        {
+            if (currentDay > loan.getDueDay())
+            {
+                overdueLoans.add(loan);
+            }
+        }
+
+        if (overdueLoans.isEmpty())
+        {
+            System.out.println("NONE");
+            return;
+        }
+
+        overdueLoans.sort((l1, l2) -> {
+            int daysLate1 = currentDay - l1.getDueDay();
+            int daysLate2 = currentDay - l2.getDueDay();
+            if (daysLate1 != daysLate2)
+            {
+                return Integer.compare(daysLate2, daysLate1);
+            }
+            return l1.getitemID().compareTo(l2.getitemID());
+        });
+
+        for (Loan loan : overdueLoans)
+        {
+            int daysLate = currentDay - loan.getDueDay();
+            LibraryItem item = items.get(loan.getitemID());
+            int fine = 0;
+            if (item instanceof Borrowable)
+            {
+                fine = daysLate * ((Borrowable) item).getFineRate();
+            }
+            System.out.println(loan.getitemID() + "|" + loan.getmemID() + "|" + daysLate + "|" + fine);
+        }
+    }
+
+    public void search(String text)
+    {
+        List<LibraryItem> matchedItems = new ArrayList<>();
+        for (LibraryItem item : items.values())
+        {
+            if (item.getTitle().toLowerCase().contains(text.toLowerCase()))
+            {
+                matchedItems.add(item);
+            }
+        }
+
+        if (matchedItems.isEmpty())
+        {
+            System.out.println("NONE");
+            return;
+        }
+
+        matchedItems.sort(Comparator.comparing(LibraryItem::getTitle)
+                                    .thenComparing(LibraryItem::getID));
+
+        for (LibraryItem item : matchedItems)
+        {
+            System.out.println(item.getID() + "|" + item.getType() + "|" + item.getTitle());
         }
     }
 }

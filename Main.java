@@ -50,6 +50,18 @@ public class Main
                     case "INVENTORY":
                         library.inventory();
                         break;
+
+                    case "LOANS":
+                        library.loans(p[1]);
+                        break;
+
+                    case "OVERDUE":
+                        library.overdue();
+                        break;
+
+                    case "SEARCH":
+                        library.search(p.length > 1 ? p[1] : "");
+                        break;
                 }
             }
             catch (ItemNotFoundException | MemberNotFoundException | ItemNotAvailableException |
